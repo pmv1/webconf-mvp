@@ -1,0 +1,23 @@
+{
+  "name": "webconf-mvp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server --port=5173"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmv1/webconf-mvp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pmv1/webconf-mvp/issues"
+  },
+  "homepage": "https://github.com/pmv1/webconf-mvp#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

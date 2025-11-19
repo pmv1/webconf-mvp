@@ -19,23 +19,138 @@
       border-radius: 16px;
       background: #111827;
       box-shadow: 0 18px 40px rgba(0,0,0,0.6);
-      max-width: 480px;
+      max-width: 520px;
+      width: 100%;
     }
     h1 {
       margin-top: 0;
       margin-bottom: 12px;
       font-size: 24px;
     }
+    h2 {
+      margin: 16px 0 8px;
+      font-size: 18px;
+    }
     p {
       margin: 0 0 8px;
+      font-size: 14px;
+      color: #d1d5db;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #9ca3af;
+    }
+    input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      outline: none;
+      font-size: 14px;
+    }
+    input[type="text"]:focus {
+      border-color: #6366f1;
+    }
+    button {
+      margin-top: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      background: #4f46e5;
+      color: #e5e7eb;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4338ca;
+    }
+    .section {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #1f2937;
+    }
+    .small {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .row input[type="text"] {
+      flex: 1;
+    }
+    #meeting-view {
+      display: none;
+    }
+    .code {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #020617;
+      border: 1px solid #374151;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>WebConf MVP</h1>
-    <p>Здесь будет моя будущая видеоконференция.</p>
-    <p>Сейчас это просто первая страничка 🙂</p>
+    <p class="small">
+      Шаг 1: создаём и подключаемся к встречам. Видео появится позже.
+    </p>
+
+    <!-- Экран №1: стартовый -->
+    <div id="start-view">
+      <div class="section">
+        <h2>Ваше имя</h2>
+        <label for="displayNameInput">Имя, которое увидят другие участники</label>
+        <input id="displayNameInput" type="text" placeholder="Например, Анна" />
+        <p class="small">Пока никуда не сохраняется, просто используем в интерфейсе.</p>
+      </div>
+
+      <div class="section">
+        <h2>Создать новую встречу</h2>
+        <p>Мы сгенерируем код встречи и ссылку, которую можно отправить участнику.</p>
+        <button id="createMeetingBtn">Создать встречу</button>
+      </div>
+
+      <div class="section">
+        <h2>Подключиться к существующей встрече</h2>
+        <p>Если вам уже прислали код или ссылку, введите код ниже.</p>
+        <div class="row">
+          <input id="joinMeetingIdInput" type="text" placeholder="Код встречи (например, 8F3K9P)" />
+          <button id="joinMeetingBtn">Подключиться</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Экран №2: внутри встречи -->
+    <div id="meeting-view">
+      <h2>Встреча <span id="meetingIdDisplay" class="code"></span></h2>
+      <p>Скопируйте эту ссылку и отправьте другому участнику:</p>
+      <div class="row">
+        <input id="meetingLinkInput" type="text" readonly />
+      </div>
+      <p class="small">Когда второй человек откроет ссылку, он попадёт в эту же встречу.</p>
+
+      <div class="section">
+        <h2>Видео и звук</h2>
+        <p class="small">
+          Здесь позже появится включение камеры и микрофона через WebRTC.
+          Пока мы делаем только навигацию и логику ссылок.
+        </p>
+      </div>
+    </div>
   </div>
+
+  <script src="main.js" type="module"></script>
 </body>
 </html>
