@@ -33,9 +33,12 @@ function init() {
   const meetingIdDisplay = document.getElementById("meetingIdDisplay");
   const meetingLinkInput = document.getElementById("meetingLinkInput");
 
-  // новые элементы для видео
   const startMediaBtn = document.getElementById("startMediaBtn");
   const localVideo = document.getElementById("localVideo");
+  const toggleVideoBtn = document.getElementById("toggleVideoBtn");
+  const toggleAudioBtn = document.getElementById("toggleAudioBtn");
+
+  let localStream = null; // будем хранить поток здесь
 
   const meetingIdFromUrl = getMeetingIdFromUrl();
 
@@ -88,18 +91,60 @@ function init() {
           audio: true
         });
         console.log("Медиапоток получен:", stream);
+
+        localStream = stream;
         localVideo.srcObject = stream;
+
         startMediaBtn.disabled = true;
         startMediaBtn.textContent = "Камера и микрофон включены";
-    } catch (err) {
-  console.error("Ошибка доступа к медиаустройствам:", err.name, err.message);
-  alert(
-    "Не удалось получить доступ к камере или микрофону.\n\n" +
-    "Тип ошибки: " + err.name + "\n" +
-    "Сообщение: " + err.message + "\n\n" +
-    "Чаще всего помогает: разрешить доступ в настройках сайта и Windows."
-  );
-}
+
+        // активируем кнопки mute/unmute
+        if (toggleVideoBtn) {
+          toggleVideoBtn.disabled = false;
+          toggleVideoBtn.textContent = "Выключить камеру";
+        }
+        if (toggleAudioBtn) {
+          toggleAudioBtn.disabled = false;
+          toggleAudioBtn.textContent = "Выключить микрофон";
+        }
+      } catch (err) {
+        console.error("Ошибка доступа к медиаустройствам:", err.name, err.message);
+        alert(
+          "Не удалось получить доступ к камере или микрофону.\n\n" +
+          "Тип ошибки: " + err.name + "\n" +
+          "Сообщение: " + err.message
+        );
+      }
+    });
+  }
+
+  // Переключатель камеры
+  if (toggleVideoBtn) {
+    toggleVideoBtn.addEventListener("click", () => {
+      if (!localStream) return;
+
+      const videoTracks = localStream.getVideoTracks();
+      if (videoTracks.length === 0) return;
+
+      const enabled = videoTracks[0].enabled;
+      videoTracks.forEach(track => (track.enabled = !enabled));
+
+      toggleVideoBtn.textContent = enabled ? "Включить камеру" : "Выключить камеру";
+    });
+  }
+
+  // Переключатель микрофона
+  if (toggleAudioBtn) {
+    toggleAudioBtn.addEventListener("click", () => {
+      if (!localStream) return;
+
+      const audioTracks = localStream.getAudioTracks();
+      if (audioTracks.length === 0) return;
+
+      const enabled = audioTracks[0].enabled;
+      audioTracks.forEach(track => (track.enabled = !enabled));
+
+      toggleAudioBtn.textContent = enabled ? "Включить микрофон" : "Выключить микрофон";
     });
   }
 }
