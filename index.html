@@ -2,101 +2,193 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>WebConf MVP</title>
+
   <style>
+    :root {
+      --bg: #050711;
+      --card-bg: #111827;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --input-bg: #020617;
+      --input-border: #374151;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      background: #050711;
-      color: #e5e7eb;
-      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       display: flex;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
     }
+
     .card {
       padding: 24px 32px;
       border-radius: 16px;
-      background: #111827;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+      background: var(--card-bg);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
       max-width: 520px;
       width: 100%;
     }
+
     h1 {
       margin-top: 0;
       margin-bottom: 12px;
       font-size: 24px;
     }
+
     h2 {
       margin: 16px 0 8px;
       font-size: 18px;
     }
+
     p {
       margin: 0 0 8px;
       font-size: 14px;
       color: #d1d5db;
     }
+
     label {
       display: block;
       font-size: 13px;
       margin-bottom: 4px;
-      color: #9ca3af;
+      color: var(--text-muted);
     }
+
     input[type="text"] {
       width: 100%;
-      box-sizing: border-box;
       padding: 8px 10px;
       border-radius: 8px;
-      border: 1px solid #374151;
-      background: #020617;
-      color: #e5e7eb;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text-main);
       outline: none;
       font-size: 14px;
     }
+
     input[type="text"]:focus {
-      border-color: #6366f1;
+      border-color: var(--accent);
     }
+
     button {
       margin-top: 8px;
       padding: 8px 14px;
       border-radius: 999px;
       border: none;
-      background: #4f46e5;
-      color: #e5e7eb;
+      background: var(--accent);
+      color: var(--text-main);
       font-size: 14px;
       cursor: pointer;
+      white-space: nowrap;
     }
+
     button:hover {
-      background: #4338ca;
+      background: var(--accent-hover);
     }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
     .section {
       margin-top: 12px;
       padding-top: 12px;
-      border-top: 1px solid #1f2937;
+      border-top: 1px solid var(--border-subtle);
     }
+
     .small {
       font-size: 12px;
-      color: #9ca3af;
+      color: var(--text-muted);
     }
+
     .row {
       display: flex;
       gap: 8px;
       margin-top: 6px;
     }
+
     .row input[type="text"] {
       flex: 1;
     }
+
     #meeting-view {
       display: none;
     }
+
     .code {
       display: inline-block;
       padding: 4px 8px;
       border-radius: 6px;
-      background: #020617;
-      border: 1px solid #374151;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
       font-size: 13px;
+    }
+
+    /* --- Адаптация под мобильные --- */
+
+    @media (max-width: 640px) {
+      body {
+        align-items: flex-start;
+        padding: 16px;
+      }
+
+      .card {
+        padding: 16px 18px;
+        border-radius: 14px;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+
+      h2 {
+        font-size: 16px;
+        margin: 12px 0 6px;
+      }
+
+      p {
+        font-size: 13px;
+      }
+
+      .small {
+        font-size: 11px;
+      }
+
+      button {
+        width: 100%;
+        text-align: center;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .row input[type="text"] {
+        flex: none;
+        width: 100%;
+      }
+
+      #localVideo {
+        max-height: 220px;
+      }
     }
   </style>
 </head>
