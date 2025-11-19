@@ -6,7 +6,6 @@ function getMeetingIdFromUrl() {
 }
 
 function generateMeetingId() {
-  // Простой вариант: случайная строка из 6 символов A-Z0-9
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let id = "";
   for (let i = 0; i < 6; i++) {
@@ -17,7 +16,7 @@ function generateMeetingId() {
 
 function buildMeetingUrl(meetingId) {
   const url = new URL(window.location.href);
-  url.search = ""; // убираем старые параметры
+  url.search = "";
   url.searchParams.set("meeting", meetingId);
   return url.toString();
 }
@@ -34,10 +33,13 @@ function init() {
   const meetingIdDisplay = document.getElementById("meetingIdDisplay");
   const meetingLinkInput = document.getElementById("meetingLinkInput");
 
+  // новые элементы для видео
+  const startMediaBtn = document.getElementById("startMediaBtn");
+  const localVideo = document.getElementById("localVideo");
+
   const meetingIdFromUrl = getMeetingIdFromUrl();
 
   if (meetingIdFromUrl) {
-    // Режим: мы уже "внутри встречи"
     console.log("Открыта встреча:", meetingIdFromUrl);
     startView.style.display = "none";
     meetingView.style.display = "block";
@@ -46,7 +48,6 @@ function init() {
     const link = buildMeetingUrl(meetingIdFromUrl);
     meetingLinkInput.value = link;
   } else {
-    // Режим: стартовая страница
     console.log("Стартовая страница без встречи");
     startView.style.display = "block";
     meetingView.style.display = "none";
@@ -59,8 +60,6 @@ function init() {
 
     const newId = generateMeetingId();
     const url = buildMeetingUrl(newId);
-
-    // Перенаправляем браузер на URL встречи
     window.location.href = url;
   });
 
@@ -78,6 +77,31 @@ function init() {
     const url = buildMeetingUrl(enteredId);
     window.location.href = url;
   });
+
+  // Включить камеру и микрофон
+  if (startMediaBtn && localVideo) {
+    startMediaBtn.addEventListener("click", async () => {
+      try {
+        console.log("Запрашиваем доступ к камере и микрофону...");
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+        console.log("Медиапоток получен:", stream);
+        localVideo.srcObject = stream;
+        startMediaBtn.disabled = true;
+        startMediaBtn.textContent = "Камера и микрофон включены";
+    } catch (err) {
+  console.error("Ошибка доступа к медиаустройствам:", err.name, err.message);
+  alert(
+    "Не удалось получить доступ к камере или микрофону.\n\n" +
+    "Тип ошибки: " + err.name + "\n" +
+    "Сообщение: " + err.message + "\n\n" +
+    "Чаще всего помогает: разрешить доступ в настройках сайта и Windows."
+  );
+}
+    });
+  }
 }
 
 init();

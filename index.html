@@ -142,12 +142,25 @@
       <p class="small">Когда второй человек откроет ссылку, он попадёт в эту же встречу.</p>
 
       <div class="section">
-        <h2>Видео и звук</h2>
-        <p class="small">
-          Здесь позже появится включение камеры и микрофона через WebRTC.
-          Пока мы делаем только навигацию и логику ссылок.
-        </p>
-      </div>
+  <h2>Видео и звук</h2>
+  <p class="small">
+    Нажмите кнопку ниже, чтобы включить камеру и микрофон на этом устройстве.
+    Это пока только локальный предпросмотр, без соединения с другими людьми.
+  </p>
+  <button id="startMediaBtn">Включить камеру и микрофон</button>
+  <div style="margin-top: 12px;">
+    <video
+      id="localVideo"
+      autoplay
+      playsinline
+      muted
+      style="width: 100%; max-height: 260px; border-radius: 12px; background: #020617; border: 1px solid #1f2937;"
+    ></video>
+  </div>
+  <p class="small">
+    Видео заглушено (muted), чтобы не было эха. В реальном звонке звук пойдёт другим участникам.
+  </p>
+</div>
     </div>
   </div>
 
