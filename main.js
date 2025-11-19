@@ -38,7 +38,9 @@ function init() {
   const toggleVideoBtn = document.getElementById("toggleVideoBtn");
   const toggleAudioBtn = document.getElementById("toggleAudioBtn");
 
-  let localStream = null; // будем хранить поток здесь
+  let localStream = null;
+  let isVideoOn = true;
+  let isAudioOn = true;
 
   const meetingIdFromUrl = getMeetingIdFromUrl();
 
@@ -98,7 +100,6 @@ function init() {
         startMediaBtn.disabled = true;
         startMediaBtn.textContent = "Камера и микрофон включены";
 
-        // активируем кнопки mute/unmute
         if (toggleVideoBtn) {
           toggleVideoBtn.disabled = false;
           toggleVideoBtn.textContent = "Выключить камеру";
@@ -118,33 +119,44 @@ function init() {
     });
   }
 
-  // Переключатель камеры
+  // Переключатель камеры (видимый эффект: видео пропадает/появляется)
   if (toggleVideoBtn) {
     toggleVideoBtn.addEventListener("click", () => {
       if (!localStream) return;
 
+      isVideoOn = !isVideoOn;
+
       const videoTracks = localStream.getVideoTracks();
-      if (videoTracks.length === 0) return;
+      videoTracks.forEach(track => (track.enabled = isVideoOn));
 
-      const enabled = videoTracks[0].enabled;
-      videoTracks.forEach(track => (track.enabled = !enabled));
+      if (isVideoOn) {
+        localVideo.srcObject = localStream;
+        toggleVideoBtn.textContent = "Выключить камеру";
+      } else {
+        // убираем поток из тега <video>, останется тёмный прямоугольник
+        localVideo.srcObject = null;
+        toggleVideoBtn.textContent = "Включить камеру";
+      }
 
-      toggleVideoBtn.textContent = enabled ? "Включить камеру" : "Выключить камеру";
+      console.log("Видео теперь", isVideoOn ? "ВКЛ" : "ВЫКЛ");
     });
   }
 
-  // Переключатель микрофона
+  // Переключатель микрофона (визуально не видно, но треки реально выключаются)
   if (toggleAudioBtn) {
     toggleAudioBtn.addEventListener("click", () => {
       if (!localStream) return;
 
+      isAudioOn = !isAudioOn;
+
       const audioTracks = localStream.getAudioTracks();
-      if (audioTracks.length === 0) return;
+      audioTracks.forEach(track => (track.enabled = isAudioOn));
 
-      const enabled = audioTracks[0].enabled;
-      audioTracks.forEach(track => (track.enabled = !enabled));
+      toggleAudioBtn.textContent = isAudioOn
+        ? "Выключить микрофон"
+        : "Включить микрофон";
 
-      toggleAudioBtn.textContent = enabled ? "Включить микрофон" : "Выключить микрофон";
+      console.log("Аудио теперь", isAudioOn ? "ВКЛ" : "ВЫКЛ");
     });
   }
 }
